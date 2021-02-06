@@ -5,6 +5,7 @@
   </h1>
 </div>
 <div class="box">
+  <a class="<%= listTitle=="Today"?"active":"idle"%>" href="/">Main List</a>
   <%lists.forEach(function(list){%>
   <a class="<%= list.name==listTitle?"active":"idle"%>" href="<%=list.name%>"><%=list.name%></a>
   <%});%>
