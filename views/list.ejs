@@ -12,8 +12,11 @@
 </div>
 <div class="box">
   <%listItems.forEach(item =>{%>
+  <% if(listTitle !== "Comments list"){%>
+
   <form action="/delete" method="POST">
     <div class="item">
+
       <input type="checkbox" name="checkbox" value="<%=item._id%>" onchange="this.form.submit()">
       <input type="hidden" name="listName" value="<%=listTitle%>">
       <p>
@@ -21,6 +24,11 @@
       </p>
     </div>
   </form>
+  <%}else{%>
+  <p>
+    <%=item.name %>
+  </p>
+  <%}%>
   <%});%>
 
   <form class="item" method="POST" action="/">
