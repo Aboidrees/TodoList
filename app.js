@@ -43,65 +43,76 @@ const listSchema = {
 
 const List = mongoose.model("List", listSchema);
 
-app.get('/', function(req, res) {
-  Item.find({}, function(err, items) {
-    if (items.length === 0) {
-      Item.insertMany(defaultItems, function(err) {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log('All items added successfully');
-        }
-      });
-      res.redirect("/");
+let listsForNav = [];
 
-    } else {
-      res.render('list', {
-        listTitle: 'Today',
-        listItems: items
-      });
-    }
+
+
+app.get('/', function(req, res) {
+  List.find({}, function(err, foundListsForNav) {
+    Item.find({}, function(err, items) {
+      if (items.length === 0) {
+        Item.insertMany(defaultItems, function(err) {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log('All items added successfully');
+          }
+        });
+        res.redirect("/");
+      } else {
+        res.render('list', {
+          listTitle: 'Today',
+          listItems: items,
+          lists: foundListsForNav,
+        });
+      }
+    });
   });
 });
 
 app.get('/:customListName', function(req, res) {
   const customListName = _.capitalize(req.params.customListName);
+  List.find({}, function(err, foundListsForNav) {
 
-  List.findOne({
-    name: customListName
-  }, function(err, foundList) {
-    if (!err) {
-      if (!foundList) {
-        // Create a new list
-        const list = new List({
-          name: customListName,
-          items: defaultItems
-        });
-
-        list.save();
-        res.redirect(`/${customListName}`);
-      } else {
-        // show an existing list
-        if (foundList.items.length === 0) {
-          List.updateOne({
-            name: customListName
-          }, {
+    List.findOne({
+      name: customListName
+    }, function(err, foundList) {
+      if (!err) {
+        if (!foundList) {
+          // Create a new list
+          const list = new List({
+            name: customListName,
             items: defaultItems
-          }, function(err) {
-            if (!err) {
-              res.redirect(`/${customListName}`);
-            }
           });
-
+          if (customListName !== "Favicon.ico") {
+            list.save();
+            res.redirect(`/${customListName}`);
+          }
         } else {
-          res.render("list", {
-            listTitle: foundList.name,
-            listItems: foundList.items
-          });
-        }
+          // show an existing list
+          if (foundList.items.length === 0) {
+            List.updateOne({
+              name: customListName
+            }, {
+              items: defaultItems
+            }, function(err) {
+              if (!err) {
+                res.redirect(`/${customListName}`);
+              }
+            });
 
+          } else {
+            res.render("list", {
+              listTitle: foundList.name,
+              listItems: foundList.items,
+              lists: foundListsForNav,
+
+            });
+          }
+
+        }
       }
-    }
+    });
   });
 });
 

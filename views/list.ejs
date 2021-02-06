@@ -5,6 +5,11 @@
   </h1>
 </div>
 <div class="box">
+  <%lists.forEach(function(list){%>
+  <a class="<%= list.name==listTitle?"active":"idle"%>" href="<%=list.name%>"><%=list.name%></a>
+  <%});%>
+</div>
+<div class="box">
   <%listItems.forEach(item =>{%>
   <form action="/delete" method="POST">
     <div class="item">

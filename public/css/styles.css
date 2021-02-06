@@ -66,6 +66,27 @@ button {
   font-size: 30px;
   padding-bottom: 6px;
   border-width: 0;
+  padding: 10px
+}
+
+.idle, .active {
+  border-radius: 5px;
+  border-color: transparent;
+  color: black;
+  font-size: 1.3rem;
+  padding-bottom: 6px;
+  border-width: 0;
+  margin: 10px;
+  text-align: center;
+  display: inline-block;
+}
+
+.idle:hover {
+  color: #A683E3;
+}
+
+.active {
+  color: #A683E3;
 }
 
 input[type="text"] {
